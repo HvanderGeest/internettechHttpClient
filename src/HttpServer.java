@@ -7,6 +7,9 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * De http server
+ */
 public class HttpServer {
 	private static ServerSocket serverSocket;
 	private static final int GATE_NUMBER = 4444;
@@ -18,17 +21,20 @@ public class HttpServer {
 		serverSocket = new ServerSocket(GATE_NUMBER);
 	
 
-//		while (ACTIVE) {
+		while (ACTIVE) {
 		
 
 				Socket socket = serverSocket.accept();
 				ResponseThread thread = httpserver.new ResponseThread(socket);
 				thread.run();
 			
-//		}
+		}
 
 	}
 
+	/**
+	 * De thread die een response geeft aan de http client
+	 */
 	private class ResponseThread extends Thread {
 
 		Socket socket;
@@ -75,11 +81,14 @@ public class HttpServer {
 					writer.flush();
 					
 					output.close();
-			
+					
+					socket.close();
 
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			
+			
 		}
 	}
 
