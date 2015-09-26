@@ -53,6 +53,8 @@ public class HttpServer {
 
 				
 					input = socket.getInputStream();
+					output = socket.getOutputStream();
+					PrintWriter writer = new PrintWriter(output, false);
 					BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 
 					System.out.println(reader.readLine());
@@ -71,9 +73,18 @@ public class HttpServer {
 					//
 					// System.out.println("inloop inhoudline= "+ line);
 					//
+					
+					//werkende loop :)
+					while(reader.ready()){
+						String text = reader.readLine();
+						System.out.println(text);
+						
+					}
+					
+				
+					System.out.println("buiten de loop");
 
-					output = socket.getOutputStream();
-					PrintWriter writer = new PrintWriter(output, false);
+					
 					writer.print("HTTP/1.1 200 OK\r\n");
 					writer.print("Content-Type: text/html\r\n\r\n\r\n");
 					writer.print("<h1>Hello World</h1>\r\n");
@@ -81,6 +92,7 @@ public class HttpServer {
 					writer.flush();
 					
 					output.close();
+					reader.close();
 					
 					socket.close();
 
@@ -88,6 +100,7 @@ public class HttpServer {
 				e.printStackTrace();
 			}
 			
+
 			
 		}
 	}
