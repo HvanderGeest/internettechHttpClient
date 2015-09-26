@@ -7,50 +7,102 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-
+/**
+ * De http server
+ */
 public class HttpServer {
-	private static ServerSocket  serverSocket;
+	private static ServerSocket serverSocket;
 	private static final int GATE_NUMBER = 4444;
+	private static final boolean ACTIVE = true;
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException  {
+
+		HttpServer httpserver = new HttpServer();
 		serverSocket = new ServerSocket(GATE_NUMBER);
-		while(true){
-			Socket socket = serverSocket.accept();
-			InputStream input = socket.getInputStream();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-			boolean go = true;
-			while(go){
-				String text = reader.readLine();
-				if(text == null){
-					go = false;
-					
-					break;
-				}
-				System.out.println(text);
-			}
-			
-			OutputStream output = socket.getOutputStream();
-			PrintWriter writer = new PrintWriter(output);
-			writer.write("HTTP/1.x 200 OK\r\n");
-			writer.write("Content-Type: text/html\r\n\r\n");
-			writer.write("<p>fasfasdfs</p>\r\n");
-			System.out.println("einde");
-			writer.flush();
-			
-			
-			
-		}
+	
+
+		while (ACTIVE) {
 		
 
+				Socket socket = serverSocket.accept();
+				ResponseThread thread = httpserver.new ResponseThread(socket);
+				thread.run();
+			
+		}
+
 	}
-	
-	
 
-}
+	/**
+	 * De thread die een response geeft aan de http client
+	 */
+	private class ResponseThread extends Thread {
 
-class WebServer {
-	
-	  
-	    
-	  
+		Socket socket;
+
+		public ResponseThread(Socket socket) {
+			this.socket = socket;
+
+		}
+
+		@Override
+		public void run() {
+				
+			InputStream input;
+			OutputStream output;
+			try {
+
+				
+					input = socket.getInputStream();
+					output = socket.getOutputStream();
+					PrintWriter writer = new PrintWriter(output, false);
+					BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+
+					System.out.println(reader.readLine());
+
+					// Hij loopt vast op de loop, maar ik weet niet waarom. Nu
+					// print hij
+					// alleen de eerste lijn
+
+					// String line;
+					// StringBuilder stringBuilder= new StringBuilder();
+					//
+					// while((line=reader.readLine())!=null|| !line.isEmpty()||
+					// !line.equals(" ")){
+					// System.out.println(line);
+					// stringBuilder.append(line);
+					//
+					// System.out.println("inloop inhoudline= "+ line);
+					//
+					
+					//werkende loop :)
+					while(reader.ready()){
+						String text = reader.readLine();
+						System.out.println(text);
+						
+					}
+					
+				
+					System.out.println("buiten de loop");
+
+					
+					writer.print("HTTP/1.1 200 OK\r\n");
+					writer.print("Content-Type: text/html\r\n\r\n\r\n");
+					writer.print("<h1>Hello World</h1>\r\n");
+
+					writer.flush();
+					
+					output.close();
+					reader.close();
+					
+					socket.close();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+
+			
+		}
+	}
+
 }
