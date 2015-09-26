@@ -31,7 +31,7 @@ public class HttpServer {
 			
 			OutputStream output = socket.getOutputStream();
 			PrintWriter writer = new PrintWriter(output);
-			writer.write("HTTP/1.1 200 OK\r\n");
+			writer.write("HTTP/1.x 200 OK\r\n");
 			writer.write("Content-Type: text/html\r\n\r\n");
 			writer.write("<p>fasfasdfs</p>\r\n");
 			System.out.println("einde");
