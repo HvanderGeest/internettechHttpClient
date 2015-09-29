@@ -61,19 +61,21 @@ public class HttpServer {
 					output = socket.getOutputStream();
 					PrintWriter writer = new PrintWriter(output, false);
 					BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-
+					
+					String getReqeustLine= reader.readLine();
+					System.out.println(getReqeustLine);	
+					String htmlString= switchToHtmlFile(getReqeustLine);
 					
 					while(reader.ready()){
 						String text = reader.readLine();
-						System.out.println(text);
-						
+						System.out.println(text);						
 					}
 					
 					
 					
 					writer.print("HTTP/1.1 200 OK\r\n");
 					writer.print("Content-Type: text/html\r\n\r\n\r\n");
-					writer.print(getHtmlFile()+"\r\n");
+					writer.print(htmlString+"\r\n");
 
 					writer.flush();
 					
@@ -90,14 +92,40 @@ public class HttpServer {
 		}
 		
 		/**
-		 * Get a htmlpage
+		 * Get a the html page of a request
 		 * @return	a String with the html page
 		 */
-		public String getHtmlFile() {
+		private String switchToHtmlFile(String reqeust) {
 			
+			String[] splitedString=reqeust.split("\\s+");
+			String getRequest= splitedString[1];
+			System.out.println("htmlFile Request= "+ getRequest);
+			
+			
+			String htmlString=null;
+			//Opens the index page
+			if(getRequest.equals("/")||getRequest.equals("/index")){
+				htmlString=getHtmlString("index.html");				
+				//Opens the SecondPage
+			}else if(getRequest.equals("/index/SecondPage")){
+				htmlString=getHtmlString("SecondPage.html");
+			}else if(getRequest.equals("/index/ThirdPage")){
+				htmlString=getHtmlString("ThirdPage.html");
+			}
+			
+			return htmlString;
+			
+		}
+		
+		/**
+		 * Convert the htmlfile into a String
+		 * @param htmlPage	the html file name
+		 * @return			De html String
+		 */
+		private String getHtmlString(String htmlPage){
 			List<String> htmlLines;
 			try {
-				htmlLines = Files.readAllLines(Paths.get("index.html"));
+				htmlLines = Files.readAllLines(Paths.get(htmlPage));
 				StringBuilder stringBuilder= new StringBuilder();
 				for(String line: htmlLines){
 					stringBuilder.append(line);
@@ -110,8 +138,8 @@ public class HttpServer {
 			}
 			
 			return null;
-			
 		}
+		
 	}
 
 }
