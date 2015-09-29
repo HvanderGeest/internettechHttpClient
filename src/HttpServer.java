@@ -1,4 +1,6 @@
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -6,6 +8,9 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 
 /**
  * De http server
@@ -57,43 +62,23 @@ public class HttpServer {
 					PrintWriter writer = new PrintWriter(output, false);
 					BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 
-					System.out.println(reader.readLine());
-
-					// Hij loopt vast op de loop, maar ik weet niet waarom. Nu
-					// print hij
-					// alleen de eerste lijn
-
-					// String line;
-					// StringBuilder stringBuilder= new StringBuilder();
-					//
-					// while((line=reader.readLine())!=null|| !line.isEmpty()||
-					// !line.equals(" ")){
-					// System.out.println(line);
-					// stringBuilder.append(line);
-					//
-					// System.out.println("inloop inhoudline= "+ line);
-					//
 					
-					//werkende loop :)
 					while(reader.ready()){
 						String text = reader.readLine();
 						System.out.println(text);
 						
 					}
 					
-				
-					System.out.println("buiten de loop");
-
+					
 					
 					writer.print("HTTP/1.1 200 OK\r\n");
 					writer.print("Content-Type: text/html\r\n\r\n\r\n");
-					writer.print("<h1>Hello World</h1>\r\n");
+					writer.print(getHtmlFile()+"\r\n");
 
 					writer.flush();
 					
 					output.close();
-					reader.close();
-					
+
 					socket.close();
 
 			} catch (IOException e) {
@@ -101,6 +86,30 @@ public class HttpServer {
 			}
 			
 
+			
+		}
+		
+		/**
+		 * Get a htmlpage
+		 * @return	a String with the html page
+		 */
+		public String getHtmlFile() {
+			
+			List<String> htmlLines;
+			try {
+				htmlLines = Files.readAllLines(Paths.get("index.html"));
+				StringBuilder stringBuilder= new StringBuilder();
+				for(String line: htmlLines){
+					stringBuilder.append(line);
+				}
+				
+				return stringBuilder.toString();
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
+			
+			return null;
 			
 		}
 	}
