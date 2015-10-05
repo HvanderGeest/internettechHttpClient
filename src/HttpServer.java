@@ -1,7 +1,10 @@
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -9,9 +12,15 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+
 import java.util.Base64;
 
 import javax.imageio.ImageIO;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
 
 /**
  * De http server
@@ -59,10 +68,10 @@ public class HttpServer {
 				String byteImageString = Base64.getMimeEncoder().encodeToString(outputStream.toByteArray());
 				writer.print("HTTP/1.1 200 OK\r\n");
 				writer.print("Content-Type: image/jpeg\r\n");
-				writer.println("Content-Length: "+outputStream.toByteArray().length+"\r\n");
+				writer.print("Content-Length: "+byteImageString.length()+"\r\n");
 				writer.print("\r\n");
-				writer.println(byteImageString);
-				//System.out.println(byteImageString);
+				writer.print(byteImageString);
+				System.out.println(byteImageString);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -83,40 +92,23 @@ public class HttpServer {
 					output = socket.getOutputStream();
 					PrintWriter writer = new PrintWriter(output, false);
 					BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+					//aan om afbeeldingen te testen
 					boolean testImage = true;
 					boolean getRequest = false;
-					String requestType = reader.readLine();
-					if(requestType.startsWith("GET")){
+					String getReqeustLine= reader.readLine();
+					System.out.println(getReqeustLine);	
+					String htmlString= null;
+					if(getReqeustLine.startsWith("GET")){
+						htmlString= switchToHtmlFile(getReqeustLine);
 						getRequest = true;
 					}
-
-					// Hij loopt vast op de loop, maar ik weet niet waarom. Nu
-					// print hij
-					// alleen de eerste lijn
-
-					// String line;
-					// StringBuilder stringBuilder= new StringBuilder();
-					//
-					// while((line=reader.readLine())!=null|| !line.isEmpty()||
-					// !line.equals(" ")){
-					// System.out.println(line);
-					// stringBuilder.append(line);
-					//
-					// System.out.println("inloop inhoudline= "+ line);
-					//
-					
-					//werkende loop :)
 					
 					
 					while(reader.ready()){
 						String text = reader.readLine();
-						
-						System.out.println(text);
-						
+						System.out.println(text);						
 					}
 					
-				
-					System.out.println("buiten de loop");
 					if(testImage){
 						sendImage(writer);
 					
@@ -124,17 +116,24 @@ public class HttpServer {
 					else if(getRequest){
 						writer.print("HTTP/1.1 200 OK\r\n");
 						writer.print("Content-Type: text/html\r\n\r\n\r\n");
-						writer.print("<h1>Hello World</h1>\r\n");
+						writer.print(htmlString+"\r\n");
 					} else {
 						System.out.println("406");
 						writer.println("HTTP/1.1 406 Not Acceptable\r\n");
 				
 					}
+
+					
+					
+					
+					
+					
+		
+
 					writer.flush();
 					
 					output.close();
-					reader.close();
-					
+
 					socket.close();
 
 			} catch (IOException e) {
@@ -144,6 +143,56 @@ public class HttpServer {
 
 			
 		}
+		
+		/**
+		 * Get a the html page of a request
+		 * @return	a String with the html page
+		 */
+		private String switchToHtmlFile(String reqeust) {
+			
+			String[] splitedString=reqeust.split("\\s+");
+			String getRequest= splitedString[1];
+			System.out.println("htmlFile Request= "+ getRequest);
+			
+			
+			String htmlString=null;
+			//Opens the index page
+			if(getRequest.equals("/")||getRequest.equals("/index")){
+				htmlString=getHtmlString("index.html");				
+				//Opens the SecondPage
+			}else if(getRequest.equals("/index/SecondPage")){
+				htmlString=getHtmlString("SecondPage.html");
+			}else if(getRequest.equals("/index/ThirdPage")){
+				htmlString=getHtmlString("ThirdPage.html");
+			}
+			
+			return htmlString;
+			
+		}
+		
+		/**
+		 * Convert the htmlfile into a String
+		 * @param htmlPage	the html file name
+		 * @return			De html String
+		 */
+		private String getHtmlString(String htmlPage){
+			List<String> htmlLines;
+			try {
+				htmlLines = Files.readAllLines(Paths.get(htmlPage));
+				StringBuilder stringBuilder= new StringBuilder();
+				for(String line: htmlLines){
+					stringBuilder.append(line);
+				}
+				
+				return stringBuilder.toString();
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
+			
+			return null;
+		}
+		
 	}
 
 }
