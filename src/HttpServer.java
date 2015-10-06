@@ -157,21 +157,10 @@ public class HttpServer {
 			
 			String[] splitedString=reqeust.split("\\s+");
 			String getRequest= splitedString[1];
-			System.out.println("htmlFile Request= "+ getRequest);
-			
-			
-			String htmlString=null;
-			//Opens the index page
-			if(getRequest.equals("/")||getRequest.equals("/index")){
-				htmlString=getHtmlString("index.html");				
-				//Opens the SecondPage
-			}else if(getRequest.equals("/index/SecondPage")){
-				htmlString=getHtmlString("SecondPage.html");
-			}else if(getRequest.equals("/index/ThirdPage")){
-				htmlString=getHtmlString("ThirdPage.html");
+			if(getRequest.equals("/")){
+				return getHtmlString("index.html");
 			}
-			
-			return htmlString;
+			return getHtmlString(getRequest.substring(1));
 			
 		}
 		
