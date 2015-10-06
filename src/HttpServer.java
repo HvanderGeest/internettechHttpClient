@@ -1,9 +1,8 @@
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,7 +11,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-
 import java.util.Base64;
 
 import javax.imageio.ImageIO;
@@ -59,19 +57,23 @@ public class HttpServer {
 
 		}
 		
-		public void sendImage(PrintWriter writer){
+		public void sendImage(PrintWriter writer, OutputStream output){
 			try {
-				BufferedImage image = ImageIO.read(new File("banana.jpg"));
-				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-				ImageIO.write(image, "jpg", outputStream);
-				
-				String byteImageString = Base64.getMimeEncoder().encodeToString(outputStream.toByteArray());
+				FileInputStream file = new FileInputStream(new File("images/banana.jpg"));
 				writer.print("HTTP/1.1 200 OK\r\n");
 				writer.print("Content-Type: image/jpeg\r\n");
-				writer.print("Content-Length: "+byteImageString.length()+"\r\n");
+				//writer.print("Content-Length: "+"\r\n");
 				writer.print("\r\n");
-				writer.print(byteImageString);
-				System.out.println(byteImageString);
+				writer.flush();
+				int bytesRead = 0;
+				while(bytesRead != -1){
+					byte[] byteArray = new byte[1024];
+					bytesRead = file.read(byteArray, 0, 1024);
+					output.write(byteArray);
+					output.flush();
+				}
+				file.close();
+			
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -79,6 +81,7 @@ public class HttpServer {
 			
 			
 		}
+	
 
 		@Override
 		public void run() {
@@ -93,7 +96,7 @@ public class HttpServer {
 					PrintWriter writer = new PrintWriter(output, false);
 					BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 					//aan om afbeeldingen te testen
-					boolean testImage = true;
+					boolean testImage = false;
 					boolean getRequest = false;
 					String getReqeustLine= reader.readLine();
 					System.out.println(getReqeustLine);	
@@ -110,16 +113,18 @@ public class HttpServer {
 					}
 					
 					if(testImage){
-						sendImage(writer);
+						sendImage(writer, output);
 					
 					} 
 					else if(getRequest){
 						writer.print("HTTP/1.1 200 OK\r\n");
 						writer.print("Content-Type: text/html\r\n\r\n\r\n");
 						writer.print(htmlString+"\r\n");
+						writer.flush();
 					} else {
 						System.out.println("406");
 						writer.println("HTTP/1.1 406 Not Acceptable\r\n");
+						writer.flush();
 				
 					}
 
@@ -130,7 +135,7 @@ public class HttpServer {
 					
 		
 
-					writer.flush();
+					
 					
 					output.close();
 
