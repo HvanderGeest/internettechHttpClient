@@ -10,7 +10,6 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-
 /**
  * De http server
  */
@@ -19,19 +18,17 @@ public class HttpServer {
 	private static final int GATE_NUMBER = 4444;
 	private static final boolean ACTIVE = true;
 
-	public static void main(String[] args) throws IOException  {
+	public static void main(String[] args) throws IOException {
 
 		HttpServer httpserver = new HttpServer();
 		serverSocket = new ServerSocket(GATE_NUMBER);
-	
 
 		while (ACTIVE) {
-		
 
-				Socket socket = serverSocket.accept();
-				ResponseThread thread = httpserver.new ResponseThread(socket);
-				thread.run();
-			
+			Socket socket = serverSocket.accept();
+			ResponseThread thread = httpserver.new ResponseThread(socket);
+			thread.run();
+
 		}
 
 	}
@@ -47,38 +44,40 @@ public class HttpServer {
 			this.socket = socket;
 
 		}
-		
+
 		/**
 		 * Verstuurd een afbeelding
-		 * @param writer	De active printWriter
-		 * @param output	De actieve outputStream
-		 * @param fileName	De bestandsnaam van de afbeelding
+		 * 
+		 * @param writer
+		 *            De active printWriter
+		 * @param output
+		 *            De actieve outputStream
+		 * @param fileName
+		 *            De bestandsnaam van de afbeelding
 		 */
-		public void sendImage(PrintWriter writer, OutputStream output, String fileName){
+		public void sendImage(PrintWriter writer, OutputStream output, String fileName) {
 			try {
 				FileInputStream file = new FileInputStream(new File(fileName));
 				writer.print("HTTP/1.1 200 OK\r\n");
 				writer.print("Content-Type: image/jpeg\r\n");
 				writer.print("\r\n");
 				writer.flush();
-				
+
 				int bytesRead = 0;
-				while(bytesRead != -1){
+				while (bytesRead != -1) {
 					byte[] byteArray = new byte[1024];
 					bytesRead = file.read(byteArray, 0, 1024);
 					output.write(byteArray);
 					output.flush();
 				}
-				
+
 				file.close();
-			
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
-			
+
 		}
-	
 
 		@Override
 		public void run() {
@@ -94,7 +93,7 @@ public class HttpServer {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 				
 					String getReqeustLine= reader.readLine();
-					System.out.println(getReqeustLine);	
+					System.out.println("requestline= "+getReqeustLine);	
 					String htmlString= null;
 							
 									
@@ -104,6 +103,7 @@ public class HttpServer {
 						System.out.println(text);						
 					}
 					
+					if(getReqeustLine!=null){
 					//Get a filename out of the request
 					String filname= getFileName(getReqeustLine);
 					
@@ -140,75 +140,82 @@ public class HttpServer {
 					output.close();
 
 					socket.close();
+					}
 
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			
+			
 
 			
 		}
-		
+
 		/**
 		 * Geeft een String van het bestand
-		 * @param filename		De bestandsnaam
-		 * @return				De String met de bestandsinhoud
+		 * 
+		 * @param filename
+		 *            De bestandsnaam
+		 * @return De String met de bestandsinhoud
 		 */
 		private String switchToFile(String filename) {
-			
+
 			System.out.println(filename);
-			if(filename.equals("")){
+			if (filename.equals("")) {
 				return convertFileToString("index.html");
-			}else{
+			} else {
 				return convertFileToString(filename);
 			}
-				
-			
+
 		}
-		
+
 		/**
 		 * Haalt een bestandsnaam op uit een request
-		 * @param request	Het Http request
-		 * @return 			De bestandsnaam
+		 * 
+		 * @param request
+		 *            Het Http request
+		 * @return De bestandsnaam
 		 */
-		private String getFileName(String request){
-			String[] splitedString=request.split("\\s+");
-			String getRequest= splitedString[1];
-			
-			//removes the / before the file name
-			String fileName=getRequest.substring(1, getRequest.length());
+		private String getFileName(String request) {
+			String[] splitedString = request.split("\\s+");
+			String getRequest = splitedString[1];
+
+			// removes the / before the file name
+			String fileName = getRequest.substring(1, getRequest.length());
 
 			return fileName;
-			
+
 		}
-		
+
 		/**
 		 * Zet een bestand om naar een String
-		 * @param fileName	De bestandsnaam
-		 * @return			De String met de bestandsinhoud
+		 * 
+		 * @param fileName
+		 *            De bestandsnaam
+		 * @return De String met de bestandsinhoud
 		 */
-		private String convertFileToString(String fileName){
-		
+		private String convertFileToString(String fileName) {
+
 			try {
-				
-				BufferedReader bufferReader= new BufferedReader (new FileReader(fileName));
-				StringBuilder stringBuilder= new StringBuilder();
-				
-				String line= null;
-				
-				while((line=bufferReader.readLine())!=null){
+
+				BufferedReader bufferReader = new BufferedReader(new FileReader(fileName));
+				StringBuilder stringBuilder = new StringBuilder();
+
+				String line = null;
+
+				while ((line = bufferReader.readLine()) != null) {
 					stringBuilder.append(line);
 				}
-					
+
 				bufferReader.close();
 				return stringBuilder.toString();
 			} catch (IOException e) {
-				
+
 				return null;
 			}
-			
+
 		}
-		
+
 	}
 
 }
