@@ -1,6 +1,4 @@
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -11,13 +9,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Base64;
-
-import javax.imageio.ImageIO;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
 
 /**
@@ -57,14 +48,20 @@ public class HttpServer {
 
 		}
 		
-		public void sendImage(PrintWriter writer, OutputStream output){
+		/**
+		 * Verstuurd een afbeelding
+		 * @param writer	De active printWriter
+		 * @param output	De actieve outputStream
+		 * @param fileName	De bestandsnaam van de afbeelding
+		 */
+		public void sendImage(PrintWriter writer, OutputStream output, String fileName){
 			try {
-				FileInputStream file = new FileInputStream(new File("images/banana.jpg"));
+				FileInputStream file = new FileInputStream(new File(fileName));
 				writer.print("HTTP/1.1 200 OK\r\n");
 				writer.print("Content-Type: image/jpeg\r\n");
-				//writer.print("Content-Length: "+"\r\n");
 				writer.print("\r\n");
 				writer.flush();
+				
 				int bytesRead = 0;
 				while(bytesRead != -1){
 					byte[] byteArray = new byte[1024];
@@ -72,10 +69,10 @@ public class HttpServer {
 					output.write(byteArray);
 					output.flush();
 				}
+				
 				file.close();
 			
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -95,47 +92,50 @@ public class HttpServer {
 					output = socket.getOutputStream();
 					PrintWriter writer = new PrintWriter(output, false);
 					BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-					//aan om afbeeldingen te testen
-					boolean testImage = false;
-					boolean getRequest = false;
+				
 					String getReqeustLine= reader.readLine();
 					System.out.println(getReqeustLine);	
 					String htmlString= null;
-					if(getReqeustLine.startsWith("GET")){
-						htmlString= switchToHtmlFile(getReqeustLine);
-						getRequest = true;
-					}
-					
+							
+									
 					
 					while(reader.ready()){
 						String text = reader.readLine();
 						System.out.println(text);						
 					}
 					
-					if(testImage){
-						sendImage(writer, output);
+					//Get a filename out of the request
+					String filname= getFileName(getReqeustLine);
+					
+					if(getReqeustLine.contains("images/")){
+						
+						sendImage(writer, output, filname);
 					
 					} 
-					else if(getRequest){
-						writer.print("HTTP/1.1 200 OK\r\n");
-						writer.print("Content-Type: text/html\r\n\r\n\r\n");
-						writer.print(htmlString+"\r\n");
-						writer.flush();
-					} else {
+					else if(getReqeustLine.startsWith("GET") && !getReqeustLine.contains("/favicon.ico")){
+						htmlString= switchToFile(filname);
+						
+						if(htmlString!=null){
+							writer.print("HTTP/1.1 200 OK\r\n");
+							writer.print("Content-Type: text/html\r\n\r\n\r\n");
+							writer.print(htmlString+"\r\n");
+							writer.flush();
+						}else{
+							System.out.println("404");
+							writer.print("HTTP/1.1 404 OK\r\n");	
+							writer.flush();
+						}
+					
+					}
+			
+					else {
 						System.out.println("406");
 						writer.println("HTTP/1.1 406 Not Acceptable\r\n");
 						writer.flush();
 				
 					}
 
-					
-					
-					
-					
-					
-		
-
-					
+								
 					
 					output.close();
 
@@ -150,41 +150,63 @@ public class HttpServer {
 		}
 		
 		/**
-		 * Get a the html page of a request
-		 * @return	a String with the html page
+		 * Geeft een String van het bestand
+		 * @param filename		De bestandsnaam
+		 * @return				De String met de bestandsinhoud
 		 */
-		private String switchToHtmlFile(String reqeust) {
+		private String switchToFile(String filename) {
 			
-			String[] splitedString=reqeust.split("\\s+");
-			String getRequest= splitedString[1];
-			if(getRequest.equals("/")){
-				return getHtmlString("index.html");
+			System.out.println(filename);
+			if(filename.equals("")){
+				return convertFileToString("index.html");
+			}else{
+				return convertFileToString(filename);
 			}
-			return getHtmlString(getRequest.substring(1));
+				
 			
 		}
 		
 		/**
-		 * Convert the htmlfile into a String
-		 * @param htmlPage	the html file name
-		 * @return			De html String
+		 * Haalt een bestandsnaam op uit een request
+		 * @param request	Het Http request
+		 * @return 			De bestandsnaam
 		 */
-		private String getHtmlString(String htmlPage){
-			List<String> htmlLines;
+		private String getFileName(String request){
+			String[] splitedString=request.split("\\s+");
+			String getRequest= splitedString[1];
+			
+			//removes the / before the file name
+			String fileName=getRequest.substring(1, getRequest.length());
+
+			return fileName;
+			
+		}
+		
+		/**
+		 * Zet een bestand om naar een String
+		 * @param fileName	De bestandsnaam
+		 * @return			De String met de bestandsinhoud
+		 */
+		private String convertFileToString(String fileName){
+		
 			try {
-				htmlLines = Files.readAllLines(Paths.get(htmlPage));
+				
+				BufferedReader bufferReader= new BufferedReader (new FileReader(fileName));
 				StringBuilder stringBuilder= new StringBuilder();
-				for(String line: htmlLines){
+				
+				String line= null;
+				
+				while((line=bufferReader.readLine())!=null){
 					stringBuilder.append(line);
 				}
-				
+					
+				bufferReader.close();
 				return stringBuilder.toString();
 			} catch (IOException e) {
 				
-				e.printStackTrace();
+				return null;
 			}
 			
-			return null;
 		}
 		
 	}
