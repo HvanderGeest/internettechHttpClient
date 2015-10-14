@@ -1,6 +1,5 @@
-//image Array to add an image to the slide show add the path to the array here
+
 var imageArray = ["images/slideshow/img-1.png", "images/slideshow/img-2.png", "images/slideshow/img-3.png"];
-//the next image that is going to be displayed from the array
 var current = 1;
 function startSlideshow(){
 	var imageElement = document.getElementById("diaimg");

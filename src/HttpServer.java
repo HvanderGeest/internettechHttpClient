@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -55,11 +56,26 @@ public class HttpServer {
 		 * @param fileName
 		 *            De bestandsnaam van de afbeelding
 		 */
-		public void sendImage(PrintWriter writer, OutputStream output, String fileName) {
+		public void sendFile(PrintWriter writer, OutputStream output, String fileName, String contentType) {
 			try {
 				FileInputStream file = new FileInputStream(new File(fileName));
+				
 				writer.print("HTTP/1.1 200 OK\r\n");
-				writer.print("Content-Type: image/jpeg\r\n");
+				if(contentType.equals("*/*")){
+					if(fileName.contains(".js")){
+						System.out.println("het is javascript");
+						writer.print("Content-Type: application/javascript");
+						
+					}
+				} else if(fileName.contains(".jpg") || fileName.contains(".png")){
+					writer.print("Content-Type: image/jpeg");
+				}
+				else {
+					writer.print("Content-Type: "+contentType);
+				}
+				writer.print("\r\n");
+				writer.print("Content-Length: "+file.available());
+				writer.print("\r\n");
 				writer.print("\r\n");
 				writer.flush();
 
@@ -67,7 +83,10 @@ public class HttpServer {
 				while (bytesRead != -1) {
 					byte[] byteArray = new byte[1024];
 					bytesRead = file.read(byteArray, 0, 1024);
-					output.write(byteArray);
+					if(bytesRead == -1){
+						return;
+					}
+					output.write(byteArray, 0, bytesRead);
 					output.flush();
 				}
 
@@ -75,9 +94,13 @@ public class HttpServer {
 
 			} catch (IOException e) {
 				e.printStackTrace();
+				writer.print("HTTP/1.1 404 FILE NOT FOUND\r\n");	
+				writer.flush();
 			}
 
 		}
+		
+		
 
 		@Override
 		public void run() {
@@ -109,45 +132,12 @@ public class HttpServer {
 					
 					if(getReqeustLine!=null){
 					//Get a filename out of the request
-					String filname= getFileName(getReqeustLine);
+					String filename= getFileName(getReqeustLine);
 					
 				
 					if(getReqeustLine.startsWith("GET") && !getReqeustLine.contains("/favicon.ico")){
+						sendFile(writer, output, filename, contentType);
 						
-						if(getReqeustLine.contains(".jpg") || getReqeustLine.contains(".png")){
-							
-							sendImage(writer, output, filname);
-							return;
-							
-						
-						} 
-						codeString= switchToFile(filname);
-						
-						
-						if(codeString!=null){
-							
-							writer.print("HTTP/1.1 200 OK\r\n");
-							if(contentType.equals("*/*")){
-								if(filname.contains(".js")){
-									writer.print("Content-Type: application/javascript");
-									System.out.println("het is javascript<<<");
-								}
-							} else {
-								writer.print("Content-Type: "+contentType);
-							}
-							
-							writer.print("\r\n\r\n\r\n");
-							
-							
-							
-							writer.print(codeString+"\r\n");
-							writer.flush();
-						}else{
-							System.out.println("404");
-							writer.print("HTTP/1.1 404 OK\r\n");	
-							writer.flush();
-						}
-					
 					}
 			
 					else {
@@ -173,23 +163,7 @@ public class HttpServer {
 			
 		}
 
-		/**
-		 * Geeft een String van het bestand
-		 * 
-		 * @param filename
-		 *            De bestandsnaam
-		 * @return De String met de bestandsinhoud
-		 */
-		private String switchToFile(String filename) {
-
-			System.out.println(filename);
-			if (filename.equals("")) {
-				return convertFileToString("index.html");
-			} else {
-				return convertFileToString(filename);
-			}
-
-		}
+	
 
 		/**
 		 * Haalt een bestandsnaam op uit een request
@@ -199,44 +173,21 @@ public class HttpServer {
 		 * @return De bestandsnaam
 		 */
 		private String getFileName(String request) {
+			
 			String[] splitedString = request.split("\\s+");
 			String getRequest = splitedString[1];
 
 			// removes the / before the file name
 			String fileName = getRequest.substring(1, getRequest.length());
+			if(fileName.isEmpty()){
+				fileName = "index.html";
+			}
 
 			return fileName;
 
 		}
 
-		/**
-		 * Zet een bestand om naar een String
-		 * 
-		 * @param fileName
-		 *            De bestandsnaam
-		 * @return De String met de bestandsinhoud
-		 */
-		private String convertFileToString(String fileName) {
-
-			try {
-
-				BufferedReader bufferReader = new BufferedReader(new FileReader(fileName));
-				StringBuilder stringBuilder = new StringBuilder();
-
-				String line = null;
-
-				while ((line = bufferReader.readLine()) != null) {
-					stringBuilder.append(line);
-				}
-
-				bufferReader.close();
-				return stringBuilder.toString();
-			} catch (IOException e) {
-
-				return null;
-			}
-
-		}
+		
 
 	}
 
