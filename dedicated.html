@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Deticated Hosting</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script src="js/mobilemenu.js" type="text/javascript"></script>
+	<script src="js/mail.js"  type="text/javascript"></script>
+	<script src="js/dedicated.js"  type="text/javascript"></script>
+</head>
+<body onload="screenResize()">
+
+
+
+	<nav>
+		<div class="mid-align">
+
+			<ul id ="toggle"><li id="togglebutton" onclick="toggleMenu()">Open Menu</li></ul>
+			<ul id="menu"><li><a href="index.html">Home</a></li><li><a href="web.html">Web Hosting</a></li><li><a href="dedicated.html">Dedicated Hosting</a></li><li><a href="vps.html">VPS Hosting</a></li></ul>
+		</div>
+	</nav>
+
+
+
+
+
+
+
+	<div class="mid-align">
+
+		<h1>Dedicated Hosting</h1>
+
+		<div class="offer"  >
+			<div class="title" id="green">Cheap Ass Hosting</div>
+			<div class="offerContent">
+				<ul>
+					<li>Xeon processor</li>
+					<li>8 gb</li>
+					<li>5 euro per maand</li>
+				</ul>
+				<div class="buttongreen" onclick="cheapAssHosting()">Learn more</div>
+			</div>
+		</div>
+
+
+		<div class="offer" >
+			<div class="title">Best choice hosting</div>
+			<div class="offerContent">
+				<ul>
+					<li>Xeon</li>
+					<li>32 gb</li>
+					<li>20 euro per maand</li>
+				</ul>
+				<div class="button" onclick="bestChoiseHosting()">Learn more</div>
+			</div>
+		</div>
+
+		<div class="offer"  >
+			<div class="title" id="red">Overpriced hosting</div>
+			<div class="offerContent">
+				<ul>
+					<li>Xeon</li>
+					<li>64 gb</li>
+					<li>40 euro per maand</li>
+				</ul>
+				<div class="buttonred" onclick="overpricedHosting()">Learn more</div>
+			</div>
+		</div>
+
+		<div class="container" >
+			
+			<div class="content" id="packet">
+				<h3 id="hostingTitle">Cheap Ass Hosting</h3>
+				<p id ="hostingText">Cheap ass server. We will dig up the most old DL380 G2 we got in store and your website will be slow. Don't blame us.. You dont want to pay for quality. For example for someone who wants to host a game server for their friends.</p>
+
+
+			</div>
+			<div class="information">
+			<section>
+				<h2>About dedicated Hosting</h2>
+				<p>
+					A dedicated hosting service, dedicated server, or managed hosting service is a type of Internet hosting in which the client leases an entire server not shared with anyone else. This is more flexible than shared hosting, as organizations have full control over the server(s), including choice of operating system, hardware, etc. There is also another level of dedicated or managed hosting commonly referred to as complex managed hosting. Complex Managed Hosting applies to both physical dedicated servers, Hybrid server and virtual servers, with many companies choosing a hybrid (combination of physical and virtual) hosting solution. There are many similarities between standard and complex managed hosting but the key difference is the level of administrative and engineering support that the customer pays for owing to both the increased size and complexity of the infrastructure deployment. The provider steps in to take over most of the management, including security, memory, storage and IT support. The service is primarily proactive in nature. Server administration can usually be provided by the hosting company as an add-on service. In some cases a dedicated server can offer less overhead and a larger return on investment. Dedicated servers are most often housed in data centers, similar to colocation facilities, providing redundant power sources and HVAC systems. In contrast to colocation, the server hardware is owned by the provider and in some cases they will provide support for operating systems or applications.
+					Using a dedicated hosting service offers the benefits of high performance, security, email stability, and control. Due to the relatively high price of dedicated hosting, it is mostly used by websites that receive a large volume of traffic.
+				</p>
+				<p>Read more information about dedicated hosting on <a href="https://en.wikipedia.org/wiki/Dedicated_hosting_service">wikipedia</a></p>
+			</section>
+
+		</div>
+
+
+
+		</div>
+			<div class="extra">
+				<form method='post' action='#'>
+					<h3>Neem nu contact op:</h3>
+					<h5>E-mail adress</h5>
+					<input id="emailaddres" type='email' name='email' placeholder='john@example.com'>
+					<h5>Your message</h5>
+					<textarea id="emailtext" name="message" placeholder="Say something cool"> </textarea>
+					<input type='submit' value='Send message' onclick="openMailProvider()" />
+				</form>
+			</div>
+
+		
+	</div>

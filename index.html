@@ -1,15 +1,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Index</title>
+	<meta name="viewport" content="width=device-width" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<title>Thost homepage</title>
+	<script type="text/javascript" src="js/mobilemenu.js"></script>
+	<script type="text/javascript" src="js/slideshow.js"></script>
+	<script type="text/javascript" src="js/mail.js"></script>
 </head>
-<body>
-	<h1>HomePage</h1>
-	<img src="images/banana.jpg" alt="banana minion" /><br/><br/>
-	<a href="SecondPage.html">SecondPage</a><br/><br/>
-	<a href="ThirdPage.html">ThirdPage</a>
-	
-	
-</body>
-</html>
+<body onload="screenResize()">
+	<nav>
+		<div class="mid-align">
+
+			<ul id ="toggle"><li id="togglebutton" onclick="toggleMenu()">Open Menu</li></ul>
+			<ul id="menu"><li><a href="index.html">Home</a></li><li><a href="web.html">Web Hosting</a></li><li><a href="dedicated.html">Dedicated Hosting</a></li><li><a href="vps.html">VPS Hosting</a></li></ul>
+		</div>
+	</nav>
+
+	<div class="mid-align">
+
+
+		<div id ="toastbanner">
+			<img alt="breadToast" src ="images/breadToast.png" id = "toastlogo" />
+			<h1>TOAST HOST - <i>Non branded only</i></h1>
+		</div>
+		<div id="diashow">
+			<img alt="dia-image" id="diaimg" src="images/slideshow/img-1.png"  />
+		</div>
+
+
+		<div class="container">
+			
+			<div class="content">
+				<article>
+					<header>
+						<h2>New set of DELL Servers</h2>
+						<p>We got a bunch of new Dell servers. Read here all about it.</p>
+						<img alt="news article del servers" id="newdelservers" src="images/news/dell-1.png" />
+					</header>
+
+					<p>We got a bunch of new DELL R510 servers. They all got the following specs:</p>
+						<ul>
+							<li>2 x XEON quad core cpu</li>
+							<li>64GB of Ram</li>
+							<li>Raid 10 SSD's</li>
+						</ul>
+						
+				</article> 
+
+					<article>
+						<header>
+							<h2>Say goodbye</h2>
+							<p>Old servers. New servers. Lots of updates, here it comes</p>
+							<img alt="news article old servers" src="images/news/dell-2.png" />
+						</header>
+
+						<p>OLD SERVERS? GET THEM OUT!!! WE NEED SOME SERIOUS POWAAAAAH. MAKE IT HAPPEN GUYS!</p>
+					</article> 
+
+			</div>
+
+				<div class="extra">
+					<form method='post' action='#'>
+						<h3>Neem nu contact op:</h3>
+						<h5>E-mail adress</h5>
+						<input id="emailaddres" type='email' name='email' placeholder='john@example.com'>
+						<h5>Your message</h5>
+						<textarea id="emailtext" name="message" placeholder="Say something cool"> </textarea>
+						<input type='submit' value='Send message' onclick="openMailProvider()" />
+					</form>
+				</div>
+
+		</div>
+
+
+	</div>

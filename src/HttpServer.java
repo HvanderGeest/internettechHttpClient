@@ -94,12 +94,16 @@ public class HttpServer {
 				
 					String getReqeustLine= reader.readLine();
 					System.out.println("requestline= "+getReqeustLine);	
-					String htmlString= null;
+					String codeString= null;
 							
 									
-					
+					String contentType =null;
 					while(reader.ready()){
 						String text = reader.readLine();
+						if(text.startsWith("Accept:")){
+							contentType = text.substring(8);
+							System.out.println("hier: "+contentType);
+						}
 						System.out.println(text);						
 					}
 					
@@ -107,18 +111,36 @@ public class HttpServer {
 					//Get a filename out of the request
 					String filname= getFileName(getReqeustLine);
 					
-					if(getReqeustLine.contains("images/")){
+				
+					if(getReqeustLine.startsWith("GET") && !getReqeustLine.contains("/favicon.ico")){
 						
-						sendImage(writer, output, filname);
-					
-					} 
-					else if(getReqeustLine.startsWith("GET") && !getReqeustLine.contains("/favicon.ico")){
-						htmlString= switchToFile(filname);
+						if(getReqeustLine.contains(".jpg") || getReqeustLine.contains(".png")){
+							
+							sendImage(writer, output, filname);
+							return;
+							
 						
-						if(htmlString!=null){
+						} 
+						codeString= switchToFile(filname);
+						
+						
+						if(codeString!=null){
+							
 							writer.print("HTTP/1.1 200 OK\r\n");
-							writer.print("Content-Type: text/html\r\n\r\n\r\n");
-							writer.print(htmlString+"\r\n");
+							if(contentType.equals("*/*")){
+								if(filname.contains(".js")){
+									writer.print("Content-Type: application/javascript");
+									System.out.println("het is javascript<<<");
+								}
+							} else {
+								writer.print("Content-Type: "+contentType);
+							}
+							
+							writer.print("\r\n\r\n\r\n");
+							
+							
+							
+							writer.print(codeString+"\r\n");
 							writer.flush();
 						}else{
 							System.out.println("404");

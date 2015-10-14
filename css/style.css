@@ -1,0 +1,482 @@
+body{
+	margin: 0px;
+	font-family: arial;
+	color: white;
+	background-image: url("../images/bg.jpg");
+	margin-top: 70px;
+}
+
+nav {
+	border-bottom: 2px black solid;
+	width: 100%;
+	position: fixed;
+	min-height: 40px;
+	background-color: white;
+	color: black;
+	margin-top: -86px;
+	z-index: 10;
+}
+
+nav ul li {
+	display: inline;
+	float: left;
+	padding: 10px;
+}
+
+nav ul li:hover {
+	background-color: #bbbbbb;
+}
+
+
+a {
+	text-decoration: none;
+	color: #111;
+}
+
+a:visited {
+	text-decoration: none;
+}
+
+
+form input {
+	padding: 5px;
+	width: 100%;
+	border-radius: 3px;
+}
+
+form textarea {
+	width: 100%;
+	border-radius: 3px;
+	margin-bottom: 15px;
+}
+
+article {
+	border-bottom: 1px #eee solid;
+	padding: 35px 0px;
+}
+
+article img {
+	width: 100%;
+	border: 1px #333 solid;
+	margin: 10px 0px;
+}
+
+article header p {
+	font-style: italic;
+}
+
+article li {
+	list-style: none;
+}
+
+/*
+All offer fields will be styled below
+*/
+
+.offer {
+	width: 29.333%;
+	float: left;
+	margin: 2%;
+	background-color: white;
+}
+.offer .title {
+	background-color: #6699FF;
+	padding: 30px;
+	color: black;
+	text-align: center;
+	font-size: 23px;
+}
+
+.offer .offerContent {
+	padding: 20px;
+	color: black;
+}
+
+.offer ul li {
+	list-style: none;
+}
+
+.button {
+	background-color: #6699FF;
+	border: 1px black solid;
+	padding: 10px;
+	text-align: center;
+}
+
+.button:hover {
+	background-color: white;
+}
+.buttongreen {
+	background-color: #94FF66;
+	border: 1px black solid;
+	padding: 10px;
+	text-align: center;
+}
+
+.buttongreen:hover {
+	background-color: white;
+}
+.buttonred {
+	background-color: #FF0000;
+	border: 1px black solid;
+	padding: 10px;
+	text-align: center;
+}
+
+.buttonred:hover {
+	background-color: white;
+}
+
+.menu {
+	display: none;
+}
+
+.container {
+	margin-bottom: 30px;
+}
+
+#red{
+	background-color: #FF0000;
+}
+#green {
+	background-color: #94FF66;
+}
+#packet {
+	border-color: #94FF66;
+}
+
+
+/* styling for the diashow */
+#diashow {
+	background-color: #1C1E22;
+	border: 3px black solid;
+	margin-bottom: 5%;
+	width: 100%;
+
+}
+#diashow img {
+	left:0;
+    top:0;
+	width: 100%;
+
+}
+/* toastbanner styling*/
+#toastlogo {
+	width: 10%;
+	height: 10%;
+	display: inline-block;
+	margin-left: 3%;
+	margin-top:1%;
+	margin-bottom: 1%;
+	vertical-align: middle;
+}
+#toastbanner {
+	background-color: #1C1E22;
+	border: 2px black solid;
+	margin: 1% 3% 1% 3%;
+}
+#toastbanner h1 {
+	display: inline-block;
+	text-align: center;
+}
+
+/* sets the hyperlink to wikipedia to a readable color */
+.information a {
+	color: #6699FF;
+}
+
+/* styling for the offervps */
+
+.offervps {
+	width: 60%;
+	float: left;
+	margin: 2%;
+	background-color: white;
+}
+.offervps .title {
+	background-color: #6699FF;
+	padding: 30px;
+	color: black;
+	text-align: center;
+	font-size: 23px;
+}
+
+.offervps .offerContent {
+	padding: 20px;
+	color: black;
+	text-align: center;
+}
+
+.offervps ul li {
+	list-style: none;
+}
+
+/* styling for video */
+.video {
+	clear: both;
+	margin-top: 2%; 
+	width: 100%;
+	height: 75%;
+}
+.video h2 {
+	margin-top: 1%;
+	text-align: center;
+	border: black solid 2px;
+	color: #C8C8C8;
+}
+
+.video video {
+	border: black solid 1px;
+	width: 100%;
+	height: 75%;
+}
+
+
+
+
+
+
+/*
+Mobile first ofc All queries for small mobile screens will be placed here 
+*/
+
+@media all and (max-width:760px) {
+
+	nav {
+		border-bottom: 2px black solid;
+		width: 100%;
+		position: fixed;
+		min-height: 0px;
+		color: black;
+		margin-left: -40px;
+	}
+
+
+	nav ul li {
+		background-color: white;
+		width: 100%;
+		padding: 10px 20px 10px 20px;
+	}
+
+	nav ul li:hover {
+		background-color: #bbbbbb;
+	}
+
+	nav #button {
+		visibility: hidden;
+
+		position: relative;
+	}
+
+	nav #toggleButton {
+		background-color: #ddd;
+	}
+	.mid-align {
+		margin: 0 auto;
+		width: 100%;
+	}
+
+	.content {
+		padding: 0 3% 0 3%;
+		color: #C8C8C8;
+		background-color: #1C1E22;
+		float: left;
+		width: 90%;
+		border-radius: 3px;
+		border: 1px black solid;
+		margin: 2%;
+
+	}
+
+	.information {
+		padding: 0 3% 0 3%;
+		color: #C8C8C8;
+		background-color: #1C1E22;
+		float: left;
+		width: 90%;
+		border-radius: 3px;
+		border: 1px white solid;
+		margin: 2%;
+
+	}
+
+	.extra {
+		padding: 0 3% 0 3%;
+
+		color: #C8C8C8;
+		background-color: #1C1E22;
+		float: right;
+		width: 90%;
+		border-radius: 3px;
+		border: 1px black solid;
+		margin: 2%;
+		vertical-align: bottom;
+	}
+
+
+	.contactinfo {
+		text-align: left;
+	}
+
+
+	.offer {
+		width: 46%;
+		float: left;
+		margin: 2%;
+		background-color: white;
+		min-width: 240px;
+	}
+
+	.offervps {
+		width: 100%;
+		float: left;
+		margin: 2%;
+		background-color: white;
+		min-width: 240px;
+	}
+
+	#toastlogo {
+		visibility: hidden;
+	}
+
+
+
+
+}
+
+	/*
+	In case the screen get thinner than 500px, make them offers full width
+	*/
+
+	@media all and (max-width:540px) {
+		.offer {
+			width: 96%;
+			float: left;
+			margin: 2%;
+			background-color: white;
+			min-width: 300px;
+		}
+
+	}
+
+
+/*
+For the size between mobile and desktop in.
+*/
+@media all and (max-width:1200px) and (min-width: 760px) {
+
+	.mid-align {
+		margin: 0 auto;
+		width: 100%;
+		max-width: 1200px;
+	}
+
+
+
+	.content {
+		width: 57%;
+		float: left;
+		padding: 15px;
+		color: #C8C8C8;
+		background-color: #1C1E22;
+		border-radius: 6px;
+		border: 2px black solid;
+		margin-left: 3%;
+
+	}
+
+	.information {
+		width: 57%;
+		float: left;
+		padding: 15px;
+		color: #C8C8C8;
+		background-color: #1C1E22;
+		border-radius: 6px;
+		border: 2px white solid;
+		margin-left: 3%;
+
+	}
+
+	.extra {
+		padding: 15px;
+		color: #C8C8C8;
+		background-color: #1C1E22;
+		float: right;
+		width: 27%;
+		border-radius: 6px;
+		border: 2px black solid;
+		margin-right: 3%;
+	}
+
+
+	.contactinfo {
+		text-align: left;
+	}
+
+
+
+}
+
+
+
+/*
+Now for normal Dekstop systems.
+*/
+@media all and (min-width:1200px) {
+
+	.mid-align {
+		margin: 0 auto;
+		max-width: 1200px;
+	}
+
+	.content {
+		padding: 15px;
+		color: #C8C8C8;
+		background-color: #1C1E22;
+		float: left;
+		width: 60%;
+		border-radius: 6px;
+		border: 2px black solid;
+
+	}
+
+	.information {
+		padding: 15px;
+		color: #C8C8C8;
+		background-color: #1C1E22;
+		float: left;
+		width: 60%;
+		border-radius: 6px;
+		border: 2px white solid;
+		margin-top: 2%;
+
+	}
+
+	.information section p {
+		font-size: 1.2em;
+	}
+
+	.extra {
+		padding: 15px;
+		color: #C8C8C8;
+		background-color: #1C1E22;
+		float: right;
+		width: 30%;
+		border-radius: 6px;
+		border: 2px black solid;
+	}
+
+	.contactinfo {
+		text-align: left;
+	}
+
+}
+
+#newdelservers {
+	width: 100%;
+	height: 30%;
+
+
+}
+
+

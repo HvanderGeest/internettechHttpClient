@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>VPS hosting</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script src="js/mobilemenu.js"  type="text/javascript"></script>
+	<script src="js/mail.js"  type="text/javascript"></script>
+</head>
+<body onload="screenResize()">
+
+
+
+	<nav>
+		<div class="mid-align">
+
+			<ul id ="toggle"><li id="togglebutton" onclick="toggleMenu()">Open Menu</li></ul>
+			<ul id="menu"><li><a href="index.html">Home</a></li><li><a href="web.html">Web Hosting</a></li><li><a href="dedicated.html">Dedicated Hosting</a></li><li><a href="vps.html">VPS Hosting</a></li></ul>
+		</div>
+	</nav>
+
+
+
+
+
+
+
+	<div class="mid-align">
+
+
+		<div class="content">
+			<h1>VPS Hosting</h1>
+			<p>As it stands we only have one packet for vps hosting. We hope to have more customization in the future.</p>
+		</div>
+			<div class ="video">
+				<h2>What is a VPS</h2>
+				<video autoplay controls>
+					<source  src="videos/whatisavps.mp4" />
+				</video>
+			</div>
+
+			<div class="offervps">
+				<div class="title">Basic Vps hosting package</div>
+				<div class="offerContent">
+					<ul>
+						<li><strong>Processor: </strong> 8 vCPU</li>
+						<li><strong>RAM: </strong>12GB</li>
+						<li><strong>Storage: </strong>200GB</li>
+						<li><strong>bandwidth: </strong>2000M/bit</li>
+						<li><strong>Price: </strong>90 euro</li>
+					</ul>
+					<p><strong>Information: </strong>The only VPS service we offer. This packet is a balance between performance and price, targeted at individuals with money to spend and small businesses.</p>
+				</div>
+			</div>
+
+			<div class="information">
+				<section>
+					<h2>About VPS Hosting</h2>
+					<p>A virtual private server (VPS) is a virtual machine sold as a service by an Internet hosting service.</p>
+					<p>
+						A VPS runs its own copy of an operating system, and customers have superuser-level access to that operating system instance, so they can install almost any software that runs on that OS. For many purposes they are functionally equivalent to a dedicated physical server, and being software-defined, are able to be much more easily created and configured. They are priced much lower than an equivalent physical server, but as they share the underlying physical hardware with other VPSs, performance may be lower, and may depend on the workload of other instances on the same hardware node
+					</p>
+					
+					<p>Read more information about VPS Hosting on <a href="https://en.wikipedia.org/wiki/Virtual_private_server">wikipedia</a></p>
+				</section>
+
+			</div>
+
+
+			<div class="extra">
+				<form method='post' action='#'>
+					<h3>Neem nu contact op:</h3>
+					<h5>E-mail adress</h5>
+					<input id="emailaddres" type='email' name='email' placeholder='john@example.com'>
+					<h5>Your message</h5>
+					<textarea id="emailtext" name="message" placeholder="Say something cool"> </textarea>
+					<input type='submit' value='Send message' onclick="openMailProvider()" />
+				</form>
+			</div>
+
+	</div>
